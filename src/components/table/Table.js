@@ -4,6 +4,7 @@ import {resizeHandler} from "@/components/table/table.resize";
 import {isCell, matrix, nextSelector, shouldResize} from "./table.functions";
 import {TableSelection} from "@/components/table/TableSelection";
 import {$} from "@core/dom";
+import * as actions from '@/redux/actions'
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -17,7 +18,7 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable(20)
+    return createTable(20, this.store.getState())
   }
 
   prepare() {
@@ -34,6 +35,7 @@ export class Table extends ExcelComponent {
 
     this.$on('formula:input', text => {
       this.selection.current.text(text)
+      this.updateTextInStore(text)
       // console.log(text)
     })
 
@@ -41,9 +43,9 @@ export class Table extends ExcelComponent {
       this.selection.current.focus()
     })
 
-    this.$subscribe(state => {
-      console.log('TableState: ', state)
-    })
+    // this.$subscribe(state => {
+    //   console.log('TableState: ', state)
+    // })
   }
 
   selectCell($cell) {
@@ -54,7 +56,7 @@ export class Table extends ExcelComponent {
   async resizeTable(event) {
     try {
       const data = await resizeHandler(this.$root, event)
-      this.$dispatch({type: 'TABLE_RESIZE', data})
+      this.$dispatch(actions.tableResize(data))
       // console.log('Resize data', data)
     } catch (e) {
       console.warn('Resize error, e.message')
@@ -98,8 +100,17 @@ export class Table extends ExcelComponent {
       // this.$emit('table:select', $next)
     }
   }
+
+  updateTextInStore(value) {
+    this.$dispatch(actions.changeText({
+      id: this.selection.current.id(),
+      value
+    }))
+  }
+
   onInput(event) {
-    this.$emit('table:input', $(event.target))
+    // this.$emit('table:input', $(event.target))
+    this.updateTextInStore($(event.target).text())
   }
 }
 

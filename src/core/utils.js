@@ -16,3 +16,10 @@ export function range(start, end) {
 }
 // input: 0, 3
 //  output: [0, 1, 2, 3]
+
+export function storage(key, data = null) {
+  if (!data) {
+    return JSON.parse(localStorage.getItem(key))
+  }
+  localStorage.setItem(key, JSON.stringify(data))
+}
