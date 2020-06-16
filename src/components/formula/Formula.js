@@ -7,12 +7,13 @@ export class Formula extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Formula',
-      listeners: ['input', 'keydown'],
+      listeners: ['input', 'click', 'keydown'],
+      subscribe: ['currentText'],
       ...options
     });
   }
 
-  toHTML() {
+  toHtml() {
     return `
       <div class="excel__formula-info">fx</div>
       <div class="excel__formula-input" id="formula" contenteditable spellcheck="false"></div>
@@ -25,19 +26,20 @@ export class Formula extends ExcelComponent {
     this.$formula = this.$root.find('#formula')
 
     this.$on('table:select', $cell => {
-      this.$formula.text($cell.text())
+      this.$formula.text($cell.data.value)
     })
+  }
 
-    this.$on('table:input', $cell => {
-      this.$formula.text($cell.text())
-    })
+  storeChanged({currentText}) {
+    this.$formula.text(currentText)
   }
 
   onInput(event) {
-    // console.log(this.$root)
     // console.log('Formula: onInput', event.target.textContent.trim())
     this.$emit('formula:input', $(event.target).text())
   }
+
+  onClick() {}
 
   onKeydown(event) {
     const keys = ['Enter', 'Tab']
