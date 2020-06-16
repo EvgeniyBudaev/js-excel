@@ -4,8 +4,9 @@ export class Emitter {
   }
 
   // dispatch, fire, trigger
-  // Уведомляем слушателя, если они есть
-  // table.emit('table:select', {a:1}
+  // Уведомляем слушателей если они есть
+  // 'focus' или 'formula:done' это event. Просто строчка
+  // table.emit('table:select', {a:1})
   emit(event, ...args) {
     if (!Array.isArray(this.listeners[event])) {
       return false
@@ -17,9 +18,9 @@ export class Emitter {
   }
 
   // on, listen
-  // Подписываемся на уведомление
-  // Добавляем нового слушателя
-  // formula.subscribe('table:select', () => {})
+  // Подписываемся на уведомления
+  // Добавялем нового слушателя
+  // formula.subcribe('table:select', () => {})
   subscribe(event, fn) {
     this.listeners[event] = this.listeners[event] || []
     this.listeners[event].push(fn)
@@ -30,22 +31,19 @@ export class Emitter {
   }
 }
 
-// Example Пример
+// // Example
 // const emitter = new Emitter()
-//
-// const unsub = emitter.subscribe('SuperMan', data => console.log('Sub: ', data))
-//
-// emitter.emit('SuperMan', 50)
-// emitter.emit('123', 100)
+// const unsub = emitter.subscribe('vladilen', data => console.log('Sub: ', data))
+// emitter.emit('vladilen', 42)
 //
 // setTimeout(() => {
-//   unsub()
+//   emitter.emit('vladilen', 'After 1 seconds')
 // }, 1000)
 //
 // setTimeout(() => {
-//   emitter.emit('SuperMan', 'After 3 seconds')
+//   unsub()
 // }, 2000)
 //
 // setTimeout(() => {
-//   emitter.emit('SuperMan', 'After 3 seconds')
+//   emitter.emit('vladilen', 'After 3 seconds')
 // }, 3000)
