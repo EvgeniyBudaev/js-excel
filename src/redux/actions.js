@@ -3,7 +3,8 @@ import {
   TABLE_RESIZE,
   APPLY_STYLE,
   CHANGE_TEXT,
-  CHANGE_TITLE
+  CHANGE_TITLE,
+  UPDATE_DATE
 } from "./types";
 
 // Action Creator
@@ -18,6 +19,13 @@ export function changeText(data) {
   return {
     type: CHANGE_TEXT,
     data
+  }
+}
+
+export function updateDate() {
+  return {
+    // eslint-disable-next-line no-undef
+    type: UPDATE_DATE
   }
 }
 
